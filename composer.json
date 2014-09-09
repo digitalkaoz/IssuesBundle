@@ -1,0 +1,22 @@
+{
+    "name":         "digitalkaoz/issues-bundle",
+    "homepage":     "https://github.com/digitalkaoz/IssuesBundle",
+    "description":  "Symfony Bundle for digitalkaoz/issues",
+    "type":         "symfony-bundle",
+    "license":      "MIT",
+
+    "require" : {
+        "symfony/framework-bundle": "~2.3",
+        "digitalkaoz/issues": "~0.1"
+    },
+
+    "require-dev" : {
+        "phpspec/phpspec" :     "@stable"
+    },
+
+    "autoload" : {
+        "psr-4" : {
+            "Rs\\IssuesBundle\\" : ""
+        }
+    }
+}
