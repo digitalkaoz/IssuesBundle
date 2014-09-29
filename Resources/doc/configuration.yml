@@ -1,0 +1,6 @@
+projects:
+    github:
+        - digitalkaoz/issues
+        - phpcr/*
+        - symfony/[console|debug]
+        - doctrine/!(common|lexer)

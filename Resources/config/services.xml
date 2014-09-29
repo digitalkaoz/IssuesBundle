@@ -4,17 +4,25 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
-    <!--
     <parameters>
-        <parameter key="rs_issues.example.class">Rs\IssuesBundle\Example</parameter>
+        <parameter key="rs_issues.synchronizer.class">Rs\IssuesBundle\Synchronizer\Synchronizer</parameter>
+        <parameter key="rs_issues.tracker.github.class">Rs\Issues\Github\GithubTracker</parameter>
+        <parameter key="rs_issues.tracker.jira.class">Rs\Issues\Jira\JiraTracker</parameter>
+        <parameter key="rs_issues.storage.es.class">Rs\IssuesBundle\Storage\ElasticsearchStorage</parameter>
     </parameters>
 
     <services>
-        <service id="rs_issues.example" class="%rs_issues.example.class%">
-            <argument type="service" id="service_id" />
-            <argument>plain_value</argument>
-            <argument>%parameter_name%</argument>
+        <service id="rs_issues.tracker.github" class="%rs_issues.tracker.github.class%">
+            <call method="connect">
+                <argument>%github.username%</argument>
+            </call>
+        </service>
+        <service id="rs_issues.tracker.jira" class="%rs_issues.tracker.jira.class%" />
+
+        <service id="rs_issues.storage.es" class="%rs_issues.storage.es.class%">
+            <argument type="service" id="fos_elastica.index.projects.project" />
+            <argument type="service" id="fos_elastica.index.projects.issue" />
         </service>
     </services>
-    -->
+
 </container>

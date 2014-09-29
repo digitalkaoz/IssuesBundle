@@ -4,6 +4,8 @@ namespace Rs\IssuesBundle\DependencyInjection;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\FileLocator;
+use Symfony\Component\DependencyInjection\Definition;
+use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\DependencyInjection\Loader;
 
@@ -19,10 +21,34 @@ class RsIssuesExtension extends Extension
      */
     public function load(array $configs, ContainerBuilder $container)
     {
-        $configuration = new Configuration();
-        $config = $this->processConfiguration($configuration, $configs);
+        $this->loadFiles($container);
+        $this->processConfig($container, $configs);
+    }
 
-        $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
+    /**
+     * @param ContainerBuilder $container
+     */
+    private function loadFiles(ContainerBuilder $container)
+    {
+        $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('services.xml');
+    }
+
+    /**
+     * @param ContainerBuilder $container
+     * @param array            $configs
+     */
+    private function processConfig(ContainerBuilder $container, array $configs)
+    {
+        $config = $this->processConfiguration(new Configuration(), $configs);
+
+        foreach ($config as $name => $repos) {
+            $definition = $container->register('rs_issues.synchronizer.'.$name, $container->getParameter('rs_issues.synchronizer.class'));
+            $definition->setArguments(array(
+                new Reference('rs_issues.tracker.'.$name),
+                new Reference('rs_issues.storage.es'),
+                $repos
+            ));
+        }
     }
 }
