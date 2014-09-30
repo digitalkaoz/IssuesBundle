@@ -12,10 +12,9 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-
 /**
  * JiraProjectCryptCommand
- * @author Robert Schönthal <robert.schoenthal@sinnerschrader.com> 
+ * @author Robert Schönthal <robert.schoenthal@sinnerschrader.com>
  */
 class JiraProjectCryptCommand extends Command
 {
@@ -44,7 +43,6 @@ EOF
         $password = $io->askHiddenResponse($output, '<comment>Password : </comment>');
         $project = $io->ask($output, '<comment>Project  : </comment>');
         $host = $io->ask($output, '<comment>Host    : </comment>');
-
 
         $tracker = new JiraTracker();
 

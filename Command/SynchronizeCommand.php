@@ -14,9 +14,7 @@ namespace Rs\IssuesBundle\Command;
 use Rs\IssuesBundle\Storage\Storage;
 use Rs\IssuesBundle\Synchronizer\Synchronizer;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
@@ -74,7 +72,7 @@ EOF
         $this->storage->cleanup();
 
         foreach ($this->synchronizers as $synchronizer) {
-            $synchronizer->synchronize(function($message) use($output) {
+            $synchronizer->synchronize(function ($message) use ($output) {
                 $message = preg_replace('/"(.*)"/', '<info>$1</info>', $message);
                 $message = preg_replace('/\!(.*)\!/', '<error>$1</error>', $message);
 

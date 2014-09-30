@@ -51,7 +51,7 @@ class JiraSynchronizer implements Synchronizer
     }
 
     /**
-     * @param string $repo
+     * @param string   $repo
      * @param \Closure $cb
      */
     private function fetch($repo, $cb = null)
@@ -76,7 +76,7 @@ class JiraSynchronizer implements Synchronizer
     }
 
     /**
-     * @param string $repo
+     * @param  string $repo
      * @return string
      */
     private function authorize($repo)

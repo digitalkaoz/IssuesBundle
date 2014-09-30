@@ -7,10 +7,9 @@ namespace Rs\IssuesBundle\DependencyInjection\CompilerPass;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
-
 /**
  * StoragePass
- * @author Robert Schönthal <robert.schoenthal@sinnerschrader.com> 
+ * @author Robert Schönthal <robert.schoenthal@sinnerschrader.com>
  */
 class StoragePass implements CompilerPassInterface
 {

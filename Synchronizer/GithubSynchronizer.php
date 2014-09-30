@@ -51,7 +51,7 @@ class GithubSynchronizer implements Synchronizer
     }
 
     /**
-     * @param string $repo
+     * @param string   $repo
      * @param \Closure $cb
      */
     private function fetch($repo, $cb =null)

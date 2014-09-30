@@ -5,7 +5,6 @@ use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
 
-
 /**
  * SynchronizersPass
  * @author Robert Schönthal <robert.schoenthal@gmail.com>
@@ -25,7 +24,7 @@ class SynchronizersPass implements CompilerPassInterface
         $command = $container->getDefinition('rs_issues.command.sync');
         $serviceIds = $container->findTaggedServiceIds('rs_issues.synchronizer');
 
-        foreach($serviceIds as $id => $serviceConfig) {
+        foreach ($serviceIds as $id => $serviceConfig) {
             $command->addMethodCall('addSynchronizer', array(new Reference($id)));
         }
     }
