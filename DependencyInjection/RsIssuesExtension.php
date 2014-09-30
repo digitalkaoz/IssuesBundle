@@ -43,12 +43,15 @@ class RsIssuesExtension extends Extension
         $config = $this->processConfiguration(new Configuration(), $configs);
 
         foreach ($config as $name => $repos) {
-            $definition = $container->register('rs_issues.synchronizer.'.$name, $container->getParameter('rs_issues.synchronizer.class'));
+            $definition = $container->register('rs_issues.synchronizer.'.$name, $container->getParameter('rs_issues.synchronizer.'.$name.'.class'));
+
             $definition->setArguments(array(
                 new Reference('rs_issues.tracker.'.$name),
-                new Reference('rs_issues.storage.es'),
+                new Reference('rs_issues.storage'),
                 $repos
             ));
+
+            $definition->addTag('rs_issues.synchronizer');
         }
     }
 }
