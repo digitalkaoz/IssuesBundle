@@ -21,8 +21,9 @@ class RsIssuesExtension extends Extension
      */
     public function load(array $configs, ContainerBuilder $container)
     {
+
         $this->loadFiles($container);
-        $this->processConfig($container, $configs);
+        $this->processConfig($container, array($container->getParameter('rs_issues')));
     }
 
     /**

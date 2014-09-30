@@ -7,7 +7,7 @@
 
     "require" : {
         "symfony/framework-bundle": "~2.3",
-        "digitalkaoz/issues": "~0.2"
+        "digitalkaoz/issues": "~0.2.1"
     },
 
     "require-dev" : {
