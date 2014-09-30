@@ -33,7 +33,7 @@ interface Storage
     public function getProjects();
 
     /**
-     * @param string $projectId
+     * @param  string  $projectId
      * @return Issue[]
      */
     public function getIssues($projectId);

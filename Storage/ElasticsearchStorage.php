@@ -10,7 +10,6 @@ use Elastica\Type;
 use Rs\Issues\Issue;
 use Rs\Issues\Project;
 
-
 /**
  * ElasticsearchStorage
  * @author Robert Schönthal <robert.schoenthal@gmail.com>
@@ -105,7 +104,7 @@ class ElasticsearchStorage implements Storage
     }
 
     /**
-     * @param string $projectId
+     * @param  string   $projectId
      * @return Result[]
      */
     public function getIssues($projectId)
