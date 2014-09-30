@@ -6,6 +6,7 @@
     "license":      "MIT",
 
     "require" : {
+        "chobie/jira-api-restclient":           "2.0.*@dev",
         "symfony/framework-bundle": "~2.3",
         "digitalkaoz/issues": "~0.2.2"
     },
