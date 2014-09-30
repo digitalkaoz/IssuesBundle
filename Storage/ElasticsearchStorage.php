@@ -3,10 +3,13 @@
 namespace Rs\IssuesBundle\Storage;
 
 use Elastica\Document;
-use Elastica\Query\MatchAll;
+use Elastica\Query;
+use Elastica\Filter;
+use Elastica\Result;
 use Elastica\Type;
 use Rs\Issues\Issue;
 use Rs\Issues\Project;
+
 
 /**
  * ElasticsearchStorage
@@ -86,7 +89,92 @@ class ElasticsearchStorage implements Storage
      */
     public function cleanup()
     {
-        $this->projectType->deleteByQuery(new MatchAll());
-        $this->issueType->deleteByQuery(new MatchAll());
+        $this->projectType->deleteByQuery(new Query\MatchAll());
+        $this->issueType->deleteByQuery(new Query\MatchAll());
+    }
+
+    /**
+     * @return Result[]
+     */
+    public function getProjects()
+    {
+        $q = $this->createProjectQuery();
+        $projectDocs = $this->projectType->search($q)->getResults();
+
+        return $this->formatProjects($projectDocs);
+    }
+
+    /**
+     * @param string $projectId
+     * @return Result[]
+     */
+    public function getIssues($projectId)
+    {
+        $q = $this->createIssueQuery($projectId);
+        $issuesDocs = $this->issueType->search($q)->getResults();
+
+        return $this->formatIssues($issuesDocs);
+    }
+
+    /**
+     * @return Query
+     */
+    private function createProjectQuery()
+    {
+        $tq = new Query\TopChildren(new Query\MatchAll(), 'issue');
+        $tq->setParam('score', 'sum');
+
+        //this is hacky, we dont need scoring, so we hack to put the issue count into the score
+        $bq = new Query\Bool();
+        $bq->addShould($tq);
+        $bq->addShould(new Query\MatchAll());
+
+        $q = new Query($bq);
+        $q->setSize(99999);
+
+        return $q;
+    }
+
+    /**
+     * @param $projectId
+     * @return Query
+     */
+    private function createIssueQuery($projectId)
+    {
+        $q = new Query();
+        $q->setFilter(new Filter\HasParent(new Query\Term(array('_id' => $projectId)), 'project'));
+        $q->setSize(99999);
+
+        return $q;
+    }
+
+    /**
+     * @param $projectDocs
+     * @return array
+     */
+    private function formatProjects($projectDocs)
+    {
+        $projects = array_map(function (Result $result) {
+            $data = $result->getData();
+            $data['id'] = $result->getId();
+            $data['issuesCount'] = floor($result->getScore());
+
+            return $data;
+        }, $projectDocs);
+
+        $keys = array_column($projects, 'id');
+
+        return array_combine($keys, $projects);
+    }
+
+    /**
+     * @param $issuesDocs
+     * @return array
+     */
+    private function formatIssues($issuesDocs)
+    {
+        return array_map(function (Result $result) {
+            return $result->getData();
+        }, $issuesDocs);
     }
 }
