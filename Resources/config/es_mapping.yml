@@ -17,6 +17,10 @@ fos_elastica:
                             index: not_analyzed
                         badges:
                             index: not_analyzed
+                            type: nested
+                            properties:
+                                img: ~
+                                link: ~
 #                    persistence:
 #                        repository:
 
