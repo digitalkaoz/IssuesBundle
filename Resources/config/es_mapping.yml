@@ -17,7 +17,7 @@ fos_elastica:
                             index: not_analyzed
                         badges:
                             index: not_analyzed
-                            type: nested
+                            type: object
                             properties:
                                 img: ~
                                 link: ~
