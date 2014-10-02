@@ -5,7 +5,7 @@ fos_elastica:
             finder: ~
             types:
                 project:
-                    mappings: #&repository_name_mapping
+                    mappings:
                         name:
                             type: string
                             index: not_analyzed
@@ -21,14 +21,11 @@ fos_elastica:
                             properties:
                                 img: ~
                                 link: ~
-#                    persistence:
-#                        repository:
 
-                issue: #&issue_mapping
+                issue:
                     _parent:
                         type: project
                     mappings:
-                        #<< : *repository_name_mapping
                         url:
                             type: string
                             index: not_analyzed
