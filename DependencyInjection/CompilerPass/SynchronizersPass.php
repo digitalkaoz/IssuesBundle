@@ -17,15 +17,27 @@ class SynchronizersPass implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container)
     {
-        if (!$container->hasDefinition('rs_issues.command.sync')) {
+        if (!$container->hasDefinition('rs_issues.command.sync') || !$container->hasDefinition('rs_issues.provider.api')) {
             return;
         }
 
-        $command = $container->getDefinition('rs_issues.command.sync');
+        if ($container->hasDefinition('rs_issues.command.sync')) {
+            $command = $container->getDefinition('rs_issues.command.sync');
+        }
+
+        if ($container->hasDefinition('rs_issues.provider.api')) {
+            $provider = $container->getDefinition('rs_issues.provider.api');
+        }
+
         $serviceIds = $container->findTaggedServiceIds('rs_issues.synchronizer');
 
         foreach ($serviceIds as $id => $serviceConfig) {
-            $command->addMethodCall('addSynchronizer', array(new Reference($id)));
+            if (isset($command)) {
+                $command->addMethodCall('addSynchronizer', array(new Reference($id)));
+            }
+            if (isset($provider)) {
+                $provider->addMethodCall('addSynchronizer', array(new Reference($id)));
+            }
         }
     }
 }

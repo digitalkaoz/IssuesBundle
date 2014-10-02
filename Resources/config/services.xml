@@ -14,6 +14,8 @@
         <parameter key="rs_issues.storage.es.class">Rs\IssuesBundle\Storage\ElasticsearchStorage</parameter>
 
         <parameter key="rs_issues.command.sync.class">Rs\IssuesBundle\Command\SynchronizeCommand</parameter>
+
+        <parameter key="rs_issues.provider.api.class">Rs\IssuesBundle\Elastica\ApiProvider</parameter>
     </parameters>
 
     <services>
@@ -33,6 +35,13 @@
             <argument type="service" id="rs_issues.storage" />
             <!-- synchronizers will be injected by a compiler pass -->
             <tag name="console.command" />
+        </service>
+
+        <service id="rs_issues.provider.api" class="%rs_issues.provider.api.class%">
+            <argument type="service" id="rs_issues.storage" />
+            <!-- synchronizers will be injected by a compiler pass -->
+            <tag name="fos_elastica.provider" index="projects" type="project" />
+            <tag name="fos_elastica.provider" index="projects" type="issue" />
         </service>
     </services>
 
