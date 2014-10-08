@@ -17,7 +17,7 @@ class SynchronizersPass implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container)
     {
-        if (!$container->hasDefinition('rs_issues.command.sync') || !$container->hasDefinition('rs_issues.provider.api')) {
+        if (!$container->hasDefinition('rs_issues.command.sync') && !$container->hasDefinition('rs_issues.provider.api')) {
             return;
         }
 

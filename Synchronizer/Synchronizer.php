@@ -12,4 +12,9 @@ interface Synchronizer
      * @param \Closure $cb
      */
     public function synchronize($cb = null);
+
+    /**
+     * @param array $repos
+     */
+    public function setRepos(array $repos);
 }

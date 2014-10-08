@@ -1,56 +1,11 @@
 fos_elastica:
+    serializer: ~
     indexes:
         projects:
             client: default
             finder: ~
             types:
-                project:
-                    mappings:
-                        name:
-                            type: string
-                            index: not_analyzed
-                        description:
-                            type: string
-                            index: not_analyzed
-                        url:
-                            type: string
-                            index: not_analyzed
-                        badges:
-                            index: not_analyzed
-                            type: object
-                            properties:
-                                img: ~
-                                link: ~
-
+                project: ~
                 issue:
                     _parent:
-                        type: project
-                    mappings:
-                        url:
-                            type: string
-                            index: not_analyzed
-                        title:
-                            type: string
-                            index: not_analyzed
-                        text:
-                            type: string
-                            index: not_analyzed
-                        state:
-                            type: string
-                            index: not_analyzed
-                        comment_count:
-                            type: integer
-                            index: not_analyzed
-                        owner:
-                            type: string
-                        assignee:
-                            type: string
-                        number:
-                            type: integer
-                            index: not_analyzed
-                        updated_at:
-                            type: date
-                        closed_at:
-                            type: date
-                        created_at:
-                            type: date
+                        type: "project"

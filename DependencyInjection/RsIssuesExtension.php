@@ -33,6 +33,8 @@ class RsIssuesExtension extends Extension
     {
         $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('services.xml');
+        $loader->load('trackers.xml');
+        $loader->load('synchronizers.xml');
     }
 
     /**
@@ -44,14 +46,13 @@ class RsIssuesExtension extends Extension
         $config = $this->processConfiguration(new Configuration(), $configs);
 
         foreach ($config as $name => $repos) {
-            $definition = $container->register('rs_issues.synchronizer.'.$name, $container->getParameter('rs_issues.synchronizer.'.$name.'.class'));
+            if (!$container->hasDefinition('rs_issues.synchronizer.'.$name)) {
+                continue;
+            }
 
-            $definition->setArguments(array(
-                new Reference('rs_issues.tracker.'.$name),
-                new Reference('rs_issues.storage'),
-                $repos
-            ));
+            $definition = $container->getDefinition('rs_issues.synchronizer.'.$name);
 
+            $definition->addMethodCall('setRepos', array($repos));
             $definition->addTag('rs_issues.synchronizer');
         }
     }

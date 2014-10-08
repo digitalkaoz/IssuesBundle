@@ -4,6 +4,7 @@ namespace Rs\IssuesBundle\Synchronizer;
 
 use Rs\Issues\Tracker;
 use Rs\IssuesBundle\Storage\Storage;
+use Rs\IssuesBundle\Tracker\TrackerFactory;
 
 /**
  * Synchronizer
@@ -25,17 +26,19 @@ class JiraSynchronizer implements Synchronizer
      * @var Storage
      */
     private $storage;
+    /**
+     * @var TrackerFactory
+     */
+    private $trackerFactory;
 
     /**
-     * @param Tracker $tracker
      * @param Storage $storage
-     * @param array   $repos
+     * @param TrackerFactory $trackerFactory
      */
-    public function __construct(Tracker $tracker, Storage $storage, array $repos)
+    public function __construct(Storage $storage, TrackerFactory $trackerFactory)
     {
-        $this->repos = $repos;
-        $this->tracker = $tracker;
         $this->storage = $storage;
+        $this->trackerFactory = $trackerFactory;
     }
 
     /**
@@ -44,8 +47,6 @@ class JiraSynchronizer implements Synchronizer
     public function synchronize($cb = null)
     {
         foreach ($this->repos as $repo) {
-            $repo = $this->authorize($repo);
-
             $this->fetch($repo, $cb);
         }
     }
@@ -57,13 +58,11 @@ class JiraSynchronizer implements Synchronizer
     private function fetch($repo, $cb = null)
     {
         try {
-            $project = $this->tracker->getProject($repo);
+            list($host, $repo, $username, $password) = explode(' ', $repo);
+            $tracker = $this->trackerFactory->createJiraTracker($host, $username, $password);
 
+            $project = $tracker->getProject($repo);
             $this->storage->saveProject($project);
-
-            foreach ($project->getIssues() as $issue) {
-                $this->storage->saveIssue($issue, $project);
-            }
 
             if (is_callable($cb)) {
                 $cb(sprintf('synchronized "%s"', $repo));
@@ -76,39 +75,10 @@ class JiraSynchronizer implements Synchronizer
     }
 
     /**
-     * @param  string $repo
-     * @return string
+     * @param array $repos
      */
-    private function authorize($repo)
+    public function setRepos(array $repos)
     {
-        list($crypt, $host, $project) = explode(' ', $repo);
-        list($username, $password) = explode(' ', $this->decrypt($crypt));
-
-        $this->tracker->connect($username, $password, $host);
-        $repo = $project;
-
-        return $repo;
-    }
-
-    public static function encrypt($username, $password)
-    {
-        $key = pack('H*', self::KEY);
-        $iv = mcrypt_create_iv(mcrypt_get_iv_size(MCRYPT_RIJNDAEL_128, MCRYPT_MODE_CBC), MCRYPT_RAND);
-
-        $ciphertext = $iv.mcrypt_encrypt(MCRYPT_RIJNDAEL_128, $key, $username.' '.$password, MCRYPT_MODE_CBC, $iv);
-
-        return base64_encode($ciphertext);
-    }
-
-    public static function decrypt($string)
-    {
-        $key = pack('H*', self::KEY);
-        $iv_size = mcrypt_get_iv_size(MCRYPT_RIJNDAEL_128, MCRYPT_MODE_CBC);
-
-        $ciphertext = base64_decode($string);
-        $iv = substr($ciphertext, 0, $iv_size);
-        $ciphertext = substr($ciphertext, $iv_size);
-
-        return mcrypt_decrypt(MCRYPT_RIJNDAEL_128, $key, $ciphertext, MCRYPT_MODE_CBC, $iv);
+        $this->repos = $repos;
     }
 }

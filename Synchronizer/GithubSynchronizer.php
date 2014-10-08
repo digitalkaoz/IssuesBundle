@@ -2,8 +2,9 @@
 
 namespace Rs\IssuesBundle\Synchronizer;
 
-use Rs\Issues\Tracker;
+use Rs\Issues\Github\GithubTracker;
 use Rs\IssuesBundle\Storage\Storage;
+use Rs\IssuesBundle\Tracker\TrackerFactory;
 
 /**
  * Synchronizer
@@ -16,24 +17,28 @@ class GithubSynchronizer implements Synchronizer
      */
     private $repos = array();
     /**
-     * @var Tracker
-     */
-    private $tracker;
-    /**
      * @var Storage
      */
     private $storage;
+    /**
+     * @var GithubTracker
+     */
+    private $tracker;
+    /**
+     * @var null
+     */
+    private $token;
 
     /**
-     * @param Tracker $tracker
      * @param Storage $storage
-     * @param array   $repos
+     * @param TrackerFactory $trackerFactory
+     * @param string $token
      */
-    public function __construct(Tracker $tracker, Storage $storage, array $repos)
+    public function __construct(Storage $storage, TrackerFactory $trackerFactory, $token = null)
     {
-        $this->repos = $repos;
-        $this->tracker = $tracker;
         $this->storage = $storage;
+        $this->token = $token;
+        $this->tracker = $trackerFactory->createGithubTracker($token);
     }
 
     /**
@@ -60,10 +65,6 @@ class GithubSynchronizer implements Synchronizer
             $project = $this->tracker->getProject($repo);
 
             $this->storage->saveProject($project);
-
-            foreach ($project->getIssues() as $issue) {
-                $this->storage->saveIssue($issue, $project);
-            }
 
             if (is_callable($cb)) {
                 $cb(sprintf('synchronized "%s"', $repo));
@@ -95,5 +96,13 @@ class GithubSynchronizer implements Synchronizer
                 }
             }
         }
+    }
+
+    /**
+     * @param array $repos
+     */
+    public function setRepos(array $repos)
+    {
+        $this->repos = $repos;
     }
 }

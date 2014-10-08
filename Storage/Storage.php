@@ -22,12 +22,6 @@ interface Storage
     public function saveProject(Project $project);
 
     /**
-     * @param Issue   $issue
-     * @param Project $project
-     */
-    public function saveIssue(Issue $issue, Project $project);
-
-    /**
      * @return Project[]
      */
     public function getProjects();

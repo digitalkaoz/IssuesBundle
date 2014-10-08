@@ -40,47 +40,13 @@ class ElasticsearchStorage implements Storage
      */
     public function saveProject(Project $project)
     {
-        $projectData = array(
-            'name'        => $project->getName(),
-            'url'         => $project->getUrl(),
-            'description' => $project->getDescription(),
-            'type'        => $project->getType(),
-            'badges'      => $project->getBadges()
-        );
+        $response = $this->projectType->addObject($project);
 
-        $doc = new Document(spl_object_hash($project), $projectData, 'project', 'projects');
-        $this->projectType->addDocument($doc);
-
-        return $doc;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function saveIssue(Issue $issue, Project $project)
-    {
-        $issueData = array(
-            'title'         => $issue->getTitle(),
-            'text'          => $issue->getText(),
-            'state'         => $issue->getState(),
-            'created_at'    => $issue->getCreatedAt()->getTimestamp(),
-            'closed_at'     => $issue->getClosedAt() ? $issue->getClosedAt()->getTimestamp() : null,
-            'updated_at'    => $issue->getUpdatedAt() ? $issue->getUpdatedAt()->getTimestamp() : null,
-            'url'           => $issue->getUrl(),
-            'comment_count' => $issue->getCommentCount(),
-            'owner'         => $issue->getOwner(),
-            'owner_url'     => $issue->getOwnerUrl(),
-            'assignee'      => $issue->getAssignee(),
-            'assignee_url'  => $issue->getAssigneeUrl(),
-            'type'          => $issue->getType(),
-            'number'        => $issue->getNumber(),
-        );
-
-        $doc = new Document(spl_object_hash($issue), $issueData, 'issue', 'projects');
-        $doc->setParent(spl_object_hash($project));
-        $this->issueType->addDocument($doc);
-
-        return $doc;
+        foreach ($project->getIssues() as $issue) {
+            $doc = new Document();
+            $doc->setParent($response->getData()['_id']);
+            $this->issueType->addObject($issue, $doc);
+        }
     }
 
     /**
@@ -93,7 +59,7 @@ class ElasticsearchStorage implements Storage
     }
 
     /**
-     * @return Result[]
+     * @return array
      */
     public function getProjects()
     {
@@ -105,14 +71,16 @@ class ElasticsearchStorage implements Storage
 
     /**
      * @param  string   $projectId
-     * @return Result[]
+     * @return array
      */
     public function getIssues($projectId)
     {
         $q = $this->createIssueQuery($projectId);
         $issuesDocs = $this->issueType->search($q)->getResults();
 
-        return $this->formatIssues($issuesDocs);
+        return array_map(function (Result $result) {
+            return $result->getData();
+        }, $issuesDocs);
     }
 
     /**
@@ -141,7 +109,7 @@ class ElasticsearchStorage implements Storage
     private function createIssueQuery($projectId)
     {
         $q = new Query();
-        $q->setFilter(new Filter\HasParent(new Query\Term(array('_id' => $projectId)), 'project'));
+        $q->setPostFilter(new Filter\HasParent(new Query\Term(array('_id' => $projectId)), 'project'));
         $q->setSize(99999);
 
         return $q;
@@ -164,16 +132,5 @@ class ElasticsearchStorage implements Storage
         $keys = array_column($projects, 'id');
 
         return array_combine($keys, $projects);
-    }
-
-    /**
-     * @param $issuesDocs
-     * @return array
-     */
-    private function formatIssues($issuesDocs)
-    {
-        return array_map(function (Result $result) {
-            return $result->getData();
-        }, $issuesDocs);
     }
 }

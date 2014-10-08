@@ -6,13 +6,14 @@
     "license":      "MIT",
 
     "require" : {
-        "chobie/jira-api-restclient":           "2.0.*@dev",
-        "symfony/framework-bundle": "~2.3",
-        "digitalkaoz/issues": "~0.2.2"
+        "symfony/framework-bundle":             "~2.0",
+        "digitalkaoz/issues":                   "~0.3",
+        "jms/serializer-bundle":                "~0.13",
+        "friendsofsymfony/elastica-bundle":     "~3.0.0"
     },
 
     "require-dev" : {
-        "phpspec/phpspec" :     "@stable"
+        "phpspec/phpspec" :           "~2.0"
     },
 
     "autoload" : {

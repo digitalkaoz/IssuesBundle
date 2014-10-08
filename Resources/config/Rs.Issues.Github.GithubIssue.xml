@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<serializer>
+    <class name="Rs\Issues\Github\GithubIssue" exclusion-policy="ALL">
+        <virtual-property method="getId" />
+        <virtual-property method="getTitle" />
+        <virtual-property method="getDescription" />
+        <virtual-property method="getUrl" />
+        <virtual-property method="getCreatedAt" />
+        <virtual-property method="getUpdatedAt" />
+        <virtual-property method="getClosedAt" />
+        <virtual-property method="getState" />
+        <virtual-property method="getCommentCount" />
+        <virtual-property method="getAssignee" />
+        <virtual-property method="getAssigneeUrl" />
+        <virtual-property method="getAuthor" />
+        <virtual-property method="getAuthorUrl" />
+        <virtual-property method="getType" />
+        <virtual-property method="getTags" />
+    </class>
+</serializer>
