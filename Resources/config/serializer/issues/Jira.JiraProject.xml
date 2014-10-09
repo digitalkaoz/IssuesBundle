@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<serializer>
+    <class name="Rs\Issues\Jira\JiraProject" exclusion-policy="ALL">
+        <virtual-property method="getName" />
+        <virtual-property method="getDescription" />
+        <virtual-property method="getUrl" />
+        <virtual-property method="getType" />
+        <virtual-property method="getBadges" />
+    </class>
+</serializer>

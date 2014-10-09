@@ -5,7 +5,7 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <parameters>
-        <parameter key="rs_issues.tracker.github.class">Rs\Issues\Github\GithubTracker</parameter>
+        <parameter key="rs_issues.tracker.github.class">Rs\IssuesBundle\Tracker\GithubTracker</parameter>
         <parameter key="rs_issues.tracker.jira.class">Rs\Issues\Jira\JiraTracker</parameter>
         <parameter key="rs_issues.tracker.gitlab.class">Rs\Issues\Gitlab\GitlabTracker</parameter>
 

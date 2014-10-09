@@ -9,3 +9,6 @@ fos_elastica:
                 issue:
                     _parent:
                         type: "project"
+                    mappings:
+                        id:
+                            type: string
