@@ -1,5 +1,6 @@
 fos_elastica:
-    serializer: ~
+    serializer:
+        callback_class: Rs\IssuesBundle\Elastica\Callback
     indexes:
         projects:
             client: default
