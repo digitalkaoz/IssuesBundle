@@ -7,7 +7,7 @@
 
     "require" : {
         "symfony/framework-bundle":             "~2.0",
-        "digitalkaoz/issues":                   "~0.3",
+        "digitalkaoz/issues":                   "~0.3.1",
         "jms/serializer-bundle":                "~0.13",
         "friendsofsymfony/elastica-bundle":     "~3.0.0"
     },

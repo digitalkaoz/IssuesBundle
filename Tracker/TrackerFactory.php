@@ -2,7 +2,7 @@
 
 namespace Rs\IssuesBundle\Tracker;
 
-use Rs\Issues\Github\GithubTracker;
+use Rs\Issues\Gitlab\GitlabTracker;
 use Rs\Issues\Jira\JiraTracker;
 
 /**
@@ -31,6 +31,18 @@ class TrackerFactory
         $clazz = $this->githubClass;
 
         return new $clazz($token);
+    }
+
+    /**
+     * @param string $host
+     * @param string $token
+     * @return GitlabTracker
+     */
+    public function createGitlabTracker($host, $token)
+    {
+        $clazz = $this->gitlabClass;
+
+        return new $clazz($host, $token);
     }
 
     /**

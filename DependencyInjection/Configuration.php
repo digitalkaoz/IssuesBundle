@@ -25,6 +25,7 @@ class Configuration implements ConfigurationInterface
             ->children()
                 ->append($this->buildTrackerConfig('github'))
                 ->append($this->buildTrackerConfig('jira'))
+                ->append($this->buildTrackerConfig('gitlab'))
                 //update in sync with trackers implemented in "issues" itself
             ->end();
 
