@@ -3,6 +3,7 @@
 namespace Rs\IssuesBundle\Synchronizer;
 
 use Rs\Issues\Github\GithubTracker;
+use Rs\Issues\Project;
 use Rs\IssuesBundle\Storage\Storage;
 use Rs\IssuesBundle\Tracker\TrackerFactory;
 
@@ -47,53 +48,29 @@ class GithubSynchronizer implements Synchronizer
     public function synchronize($cb = null)
     {
         foreach ($this->repos as $repo) {
-            if (1 !== preg_match('/^[a-zA-Z0-9\.-]+\/[a-zA-Z0-9\.-]+/', $repo)) {
-                $this->expand($repo, $cb);
-            } else {
-                $this->fetch($repo, $cb);
+            $fetchedRepos = $this->tracker->findProjects($repo);
+
+            foreach ($fetchedRepos as $project) {
+                $this->store($project, $cb);
             }
         }
     }
 
     /**
-     * @param string   $repo
+     * @param Project  $project
      * @param \Closure $cb
      */
-    private function fetch($repo, $cb =null)
+    private function store(Project $project, $cb =null)
     {
         try {
-            $project = $this->tracker->getProject($repo);
-
             $this->storage->saveProject($project);
 
             if (is_callable($cb)) {
-                $cb(sprintf('synchronized "%s"', $repo));
+                $cb(sprintf('synchronized "%s"', $project->getName()));
             }
         } catch (\Exception $e) {
             if (is_callable($cb)) {
-                $cb(sprintf('failed !%s! with %s', $repo, $e->getMessage()));
-            }
-        }
-    }
-
-    private function expand($repo, $cb = null)
-    {
-        preg_match('/([a-zA-Z0-9\.-]+)\/.+/', $repo, $matches);
-
-        $repos = $this->tracker->getClient()->api('user')->repositories($matches[1]);
-
-        if (1 === preg_match('/([a-zA-Z0-9\.-])\/\*/', $repo, $matches)) {
-            // org/*
-            foreach ($repos as $repo) {
-                $this->fetch($repo['full_name'], $cb);
-            }
-        } else {
-            // org/[Foo|Bar]+
-            // org/(!...)
-            foreach ($repos as $key => $expandedRepo) {
-                if (preg_match('/'.str_replace('/', '\/', $repo).'/', $expandedRepo['full_name'])) {
-                    $this->fetch($expandedRepo['full_name'], $cb);
-                }
+                $cb(sprintf('failed !%s! with %s', $project->getName(), $e->getMessage()));
             }
         }
     }

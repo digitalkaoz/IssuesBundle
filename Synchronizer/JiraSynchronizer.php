@@ -12,8 +12,6 @@ use Rs\IssuesBundle\Tracker\TrackerFactory;
  */
 class JiraSynchronizer implements Synchronizer
 {
-    const KEY = "bcb04b7e103a0cd8b54763051cef08bc55abe029fdebae5e1d417e2ffb2a00a3";
-
     /**
      * @var array
      */
@@ -52,6 +50,14 @@ class JiraSynchronizer implements Synchronizer
     }
 
     /**
+     * @inheritdoc
+     */
+    public function setRepos(array $repos)
+    {
+        $this->repos = $repos;
+    }
+
+    /**
      * @param string   $repo
      * @param \Closure $cb
      */
@@ -72,13 +78,5 @@ class JiraSynchronizer implements Synchronizer
                 $cb(sprintf('failed !%s! with %s', $repo, $e->getMessage()));
             }
         }
-    }
-
-    /**
-     * @param array $repos
-     */
-    public function setRepos(array $repos)
-    {
-        $this->repos = $repos;
     }
 }

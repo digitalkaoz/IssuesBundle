@@ -11,8 +11,6 @@
     </parameters>
 
     <services>
-
-
         <service id="rs_issues.storage.es" class="%rs_issues.storage.es.class%">
             <argument type="service" id="fos_elastica.index.projects.project" />
             <argument type="service" id="fos_elastica.index.projects.issue" />

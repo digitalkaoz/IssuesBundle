@@ -43,13 +43,23 @@ class ApiProvider implements ProviderInterface
      */
     public function populate(\Closure $loggerClosure = null, array $options = array())
     {
-        foreach ($this->synchronizers as $synchronizer) {
-            $synchronizer->synchronize(function ($message) use ($loggerClosure) {
-                $message = preg_replace('/"(.*)"/', '<info>$1</info>', $message);
-                $message = preg_replace('/\!(.*)\!/', '<error>$1</error>', $message);
+        $logger = $this->createLogger($loggerClosure);
 
-                $loggerClosure($message);
-            });
+        foreach ($this->synchronizers as $synchronizer) {
+            $synchronizer->synchronize($logger);
         }
+    }
+
+    private function createLogger(\Closure $loggerClosure = null)
+    {
+        return function ($message) use($loggerClosure) {
+            if (!$loggerClosure) {
+                return;
+            }
+            $message = preg_replace('/"(.*)"/', '<info>$1</info>', $message);
+            $message = preg_replace('/\!(.*)\!/', '<error>$1</error>', $message);
+
+            $loggerClosure($message);
+        };
     }
 }

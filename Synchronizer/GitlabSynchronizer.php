@@ -2,6 +2,7 @@
 
 namespace Rs\IssuesBundle\Synchronizer;
 
+use Rs\Issues\Project;
 use Rs\Issues\Tracker;
 use Rs\IssuesBundle\Tracker\GitlabTracker;
 use Rs\IssuesBundle\Storage\Storage;
@@ -45,57 +46,29 @@ class GitlabSynchronizer implements Synchronizer
             list($host, $repository, $token) = explode(' ', $repo);
             $tracker = $this->trackerFactory->createGitlabTracker($host, $token);
 
-            if (1 !== preg_match('/^[a-zA-Z0-9\.-]+\/[a-zA-Z0-9\.-]+/', $repository)) {
-                $this->expand($repository, $tracker, $cb);
-            } else {
-                $this->fetch($repository, $tracker, $cb);
+            $fetchedRepos = $tracker->findProjects($repository);
+
+            foreach ($fetchedRepos as $project) {
+                $this->store($project, $cb);
             }
         }
     }
 
     /**
-     * @param string $repo
-     * @param Tracker $tracker
+     * @param Project  $project
      * @param \Closure $cb
      */
-    private function fetch($repo, Tracker $tracker, $cb =null)
+    private function store(Project $project, $cb =null)
     {
         try {
-            $project = $tracker->getProject($repo);
             $this->storage->saveProject($project);
 
             if (is_callable($cb)) {
-                $cb(sprintf('synchronized "%s"', $repo));
+                $cb(sprintf('synchronized "%s"', $project->getName()));
             }
         } catch (\Exception $e) {
             if (is_callable($cb)) {
-                $cb(sprintf('failed !%s! with %s', $repo, $e->getMessage()));
-            }
-        }
-    }
-
-    private function expand($repo, Tracker $tracker, $cb = null)
-    {
-        preg_match('/([a-zA-Z0-9\.-]+)\/.+/', $repo, $matches);
-
-        $repos = $tracker->getClient()->api('projects')->accessible(1, 9999);
-
-        if (1 === preg_match('/([a-zA-Z0-9\.-])\/\*/', $repo, $matches)) {
-            // org/*
-            foreach ($repos as $_repo) {
-                $ns = explode('/', $repo);
-                $ns = $ns[0];
-                if (1 === preg_match('/'.$ns.'\/(.)*/', $_repo['path_with_namespace'])) {
-                    $this->fetch($_repo['path_with_namespace'], $tracker, $cb);
-                }
-            }
-        } else {
-            // org/[Foo|Bar]+
-            // org/(!...)
-            foreach ($repos as $key => $expandedRepo) {
-                if (preg_match('/'.str_replace('/', '\/', $repo).'/', $expandedRepo['path_with_namespace'])) {
-                    $this->fetch($expandedRepo['path_with_namespace'], $tracker, $cb);
-                }
+                $cb(sprintf('failed !%s! with %s', $project->getName(), $e->getMessage()));
             }
         }
     }
