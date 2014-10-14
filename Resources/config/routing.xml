@@ -4,7 +4,7 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://symfony.com/schema/routing http://symfony.com/schema/routing/routing-1.0.xsd">
 
-    <route id="rs_issues_dashboard" pattern="/dashboard">
+    <route id="rs_issues_dashboard" pattern="/">
         <default key="_controller">FrameworkBundle:Template:template</default>
         <default key="template">RsIssuesBundle::dashboard.html.twig</default>
     </route>
