@@ -4,7 +4,6 @@ namespace Rs\IssuesBundle\Synchronizer;
 
 use Rs\Issues\Project;
 use Rs\Issues\Tracker;
-use Rs\IssuesBundle\Tracker\GitlabTracker;
 use Rs\IssuesBundle\Storage\Storage;
 use Rs\IssuesBundle\Tracker\TrackerFactory;
 
@@ -28,7 +27,7 @@ class GitlabSynchronizer implements Synchronizer
     private $trackerFactory;
 
     /**
-     * @param Storage $storage
+     * @param Storage        $storage
      * @param TrackerFactory $trackerFactory
      */
     public function __construct(Storage $storage, TrackerFactory $trackerFactory)

@@ -31,9 +31,9 @@ class GithubSynchronizer implements Synchronizer
     private $token;
 
     /**
-     * @param Storage $storage
+     * @param Storage        $storage
      * @param TrackerFactory $trackerFactory
-     * @param string $token
+     * @param string         $token
      */
     public function __construct(Storage $storage, TrackerFactory $trackerFactory, $token = null)
     {

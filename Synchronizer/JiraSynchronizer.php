@@ -30,7 +30,7 @@ class JiraSynchronizer implements Synchronizer
     private $trackerFactory;
 
     /**
-     * @param Storage $storage
+     * @param Storage        $storage
      * @param TrackerFactory $trackerFactory
      */
     public function __construct(Storage $storage, TrackerFactory $trackerFactory)

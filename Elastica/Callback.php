@@ -4,7 +4,6 @@ namespace Rs\IssuesBundle\Elastica;
 use JMS\Serializer\SerializationContext;
 use JMS\Serializer\SerializerInterface;
 
-
 /**
  * Callback
  * @author Robert Schönthal <robert.schoenthal@gmail.com>
@@ -26,4 +25,4 @@ class Callback extends \FOS\ElasticaBundle\Serializer\Callback
         return $this->serializer->serialize($object, 'json', $context);
     }
 
-} 
+}

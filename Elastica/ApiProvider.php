@@ -52,7 +52,7 @@ class ApiProvider implements ProviderInterface
 
     private function createLogger(\Closure $loggerClosure = null)
     {
-        return function ($message) use($loggerClosure) {
+        return function ($message) use ($loggerClosure) {
             if (!$loggerClosure) {
                 return;
             }

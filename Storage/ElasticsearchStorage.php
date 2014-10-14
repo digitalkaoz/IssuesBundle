@@ -70,7 +70,7 @@ class ElasticsearchStorage implements Storage
     }
 
     /**
-     * @param  string   $projectId
+     * @param  string $projectId
      * @return array
      */
     public function getIssues($projectId)

@@ -22,7 +22,7 @@ class TrackerFactory
     }
 
     /**
-     * @param string $token
+     * @param  string  $token
      * @return Tracker
      */
     public function createGithubTracker($token = null)
@@ -33,8 +33,8 @@ class TrackerFactory
     }
 
     /**
-     * @param string $host
-     * @param string $token
+     * @param  string  $host
+     * @param  string  $token
      * @return Tracker
      */
     public function createGitlabTracker($host, $token)
@@ -45,9 +45,9 @@ class TrackerFactory
     }
 
     /**
-     * @param string $host
-     * @param string $username
-     * @param string $password
+     * @param  string  $host
+     * @param  string  $username
+     * @param  string  $password
      * @return Tracker
      */
     public function createJiraTracker($host, $username = null, $password = null)
@@ -56,4 +56,4 @@ class TrackerFactory
 
         return new $clazz($host, $username, $password);
     }
-} 
+}
