@@ -108,9 +108,9 @@ var Project = React.createClass({
         if ('github' === this.props.project.type.val()) {
             return <span className="octicon octicon-mark-github" />
         } else if ('jira' === this.props.project.type.val()) {
-            return <img width="16" height="16" src="/img/jira.svg" />
+            return <img width="16" height="16" src="/bundles/rsissues/img/jira.svg" />
         } else if ('gitlab' === this.props.project.type.val()) {
-            return <img width="18" height="18" src="/img/gitlab.svg" />
+            return <img width="18" height="18" src="/bundles/rsissues/img/gitlab.svg" />
         }
     },
 

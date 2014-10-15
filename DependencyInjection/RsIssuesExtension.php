@@ -20,9 +20,12 @@ class RsIssuesExtension extends Extension
      */
     public function load(array $configs, ContainerBuilder $container)
     {
+        if ($container->hasParameter('rs_issues')) {
+            $configs = array_merge($configs, array($container->getParameter('rs_issues')));
+        }
 
         $this->loadFiles($container);
-        $this->processConfig($container, array($container->getParameter('rs_issues')));
+        $this->processConfig($container, $configs);
     }
 
     /**
@@ -50,7 +53,6 @@ class RsIssuesExtension extends Extension
             }
 
             $definition = $container->getDefinition('rs_issues.synchronizer.'.$name);
-
             $definition->addMethodCall('setRepos', array($repos));
             $definition->addTag('rs_issues.synchronizer');
         }

@@ -12,21 +12,27 @@ use Rs\Issues\Project;
 interface Storage
 {
     /**
-     * removes old issues and projects
+     * remove old issues and projects
      */
     public function cleanup();
 
     /**
+     * save a Project and all its Issues
+     *
      * @param Project $project
      */
     public function saveProject(Project $project);
 
     /**
+     * get all imported Projects
+     *
      * @return Project[]
      */
     public function getProjects();
 
     /**
+     * get all Issues for the provided Project-Id
+     *
      * @param  string  $projectId
      * @return Issue[]
      */

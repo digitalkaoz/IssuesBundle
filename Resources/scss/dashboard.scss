@@ -1,4 +1,4 @@
-$icon-font-path: "/dist/fonts/";
+$icon-font-path: "/bundles/rsissues/fonts/";
 
 @import "octicons/octicons/sprockets-octicons";
 @import "bootstrap-sass-official/assets/stylesheets/bootstrap";
@@ -179,7 +179,7 @@ $icon-font-path: "/dist/fonts/";
 
 @font-face {
   font-family: 'octicons';
-  src: url("/dist/fonts/octicons.eot?#iefix") format("embedded-opentype"), url("/dist/fonts/octicons.woff") format("woff"), url("/dist/fonts/octicons.ttf") format("truetype"), url("/dist/fonts/octicons.svg#6d0976c7609c435a1353fcfc5de3cd95cee2a673") format("svg");
+  src: url($icon-font-path + "octicons.eot?#iefix") format("embedded-opentype"), url($icon-font-path +"octicons.woff") format("woff"), url($icon-font-path +"octicons.ttf") format("truetype"), url($icon-font-path +"octicons.svg#6d0976c7609c435a1353fcfc5de3cd95cee2a673") format("svg");
   font-weight: normal;
   font-style: normal;
 }
