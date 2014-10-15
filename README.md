@@ -13,6 +13,7 @@ $ composer require digitalkaoz/issues-bundle
 enable it in your Kernel
 
 ```php
+<?php
 // app/AppKernel.php
 
     public function registerBundles()
@@ -30,7 +31,7 @@ enable it in your Kernel
 ###Issues Trackers
 simply introduce the following structure either in your `config.yml` or (for sensitive data) in your `parameters.yml`
 
-```yml
+```yaml
     rs_issues:
         github:
             - digitalkaoz/issues                                             # concrete repo
@@ -38,7 +39,7 @@ simply introduce the following structure either in your `config.yml` or (for sen
             - symfony/[Console|Debug]+$                                      # only symfony/Console and symfony/Debug
             - doctrine/(?!common|lexer)([a-z0-9\.-]+)$                       # all but doctrine/common and doctrine/lexer
         jira:
-            - https://jira.com PROJKEY [USER] [PASSWORD]                     # username and password are optional 
+            - https://jira.com PROJKEY [USER] [PASSWORD]                     # username and password are optional
         gitlab:
             - http://gitlab.com/api/v3/ johnsmith/* TOKEN                    # the repo patterns are the same like for github
             - http://gitlab.com/api/v3/ gitlab/[gitlab\-shell|Testme] TOKEN
@@ -48,14 +49,14 @@ simply introduce the following structure either in your `config.yml` or (for sen
 ###Storage Adapter
 if you are using `elasticsearch as a storage` you should import the desired mapping and configure `elastica`
 
-```yml
+```yaml
 #app/config/config.yml
 imports:
     - { resource: @RsIssuesBundle/Resources/config/es_mapping.yml }
-    
+
 fos_elastica:
     clients:
-        default: { host: localhost, port: 9200 }    
+        default: { host: localhost, port: 9200 }
 
 ```
 
@@ -63,7 +64,7 @@ fos_elastica:
 
 include the routing
 
-```yml
+```yaml
 rs_issues:
     resource: "@RsIssuesBundle/Resources/config/routing.xml"
     prefix:   /issues
@@ -71,7 +72,7 @@ rs_issues:
 
 ##Usage
 
-if you are using `elasticsearch` as adapter storage (currently the only supported one) you have two ways to sync 
+if you are using `elasticsearch` as adapter storage (currently the only supported one) you have two ways to sync
 all the repository informations into the storage:
 
 ```
@@ -93,6 +94,7 @@ Then you can visit `http://yourdomain.com/issues` (or whatever you prefixed the 
 simple implement the `Storage` Interface
 
 ```php
+<?php
 interface Storage
 {
     /**
@@ -136,8 +138,9 @@ afterwards create the service and tag it the default storage:
 
 if you implemented a new Tracker (with Projects and Issues) you need to write a new synchronizer.
 Simply implement the `Synchronizer` Interface.
- 
+
 ```php
+<?php
 interface Synchronizer
 {
     /**
