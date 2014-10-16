@@ -38,8 +38,11 @@ $icon-font-path: "/bundles/rsissues/fonts/";
   @extend .panel;
   @extend .panel-default;
 
-  &.shim {
+  &.hide {
     display: none;
+  }
+  &.shim {
+    opacity: 0.7;
   }
   &.empty {
     @extend .panel-success;

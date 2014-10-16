@@ -85,6 +85,9 @@ var Project = React.createClass({
             classes.push('empty');
         }
         if (issues === 0 && this.state.loaded === true) {
+            classes.push('hide');
+        }
+        if (this.state.loaded === false && this.props.project.issuesCount.val() > 0) {
             classes.push('shim');
         }
 
