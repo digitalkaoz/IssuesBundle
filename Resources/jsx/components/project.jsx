@@ -37,7 +37,7 @@ var Project = React.createClass({
     },
 
     componentWillReceiveProps: function(nextProps) {
-        if (this.props.issues.count() === 0 && nextProps.collapsed.val() === false && this.props.project.issuesCount.val() > 0) {
+        if (this.props.issues.count() === 0 && nextProps.collapsed.val() === false && this.props.collapsed.val() === true && this.props.project.issuesCount.val() > 0) {
             this.loadIssues();
         }
     },
@@ -47,9 +47,6 @@ var Project = React.createClass({
             return;
         }
 
-        if (this.props.issues.count() === 0) {
-            this.loadIssues();
-        }
         this.props.collapsed.set(!this.props.collapsed.val());
     },
 

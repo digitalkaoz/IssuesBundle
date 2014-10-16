@@ -39,7 +39,7 @@ $icon-font-path: "/bundles/rsissues/fonts/";
   @extend .panel-default;
 
   &.shim {
-    opacity: 0.5;
+    display: none;
   }
   &.empty {
     @extend .panel-success;
